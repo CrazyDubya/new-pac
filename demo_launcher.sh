@@ -29,14 +29,26 @@ fi
 
 # Check Flask
 if ! python3 -c "import flask" &> /dev/null; then
-    echo -e "${YELLOW}⚠️  Flask not found. Installing...${NC}"
-    pip3 install flask
+    echo -e "${YELLOW}⚠️  Flask not found.${NC}"
+    read -p "Do you want to install Flask (version 2.1.3)? [y/N]: " confirm
+    if [[ $confirm == [yY] ]]; then
+        pip3 install --user flask==2.1.3
+    else
+        echo -e "${RED}❌ Flask is required. Exiting.${NC}"
+        exit 1
+    fi
 fi
 
 # Check pytz
 if ! python3 -c "import pytz" &> /dev/null; then
-    echo -e "${YELLOW}⚠️  pytz not found. Installing...${NC}"
-    pip3 install pytz
+    echo -e "${YELLOW}⚠️  pytz not found.${NC}"
+    read -p "Do you want to install pytz (version 2022.1)? [y/N]: " confirm
+    if [[ $confirm == [yY] ]]; then
+        pip3 install --user pytz==2022.1
+    else
+        echo -e "${RED}❌ pytz is required. Exiting.${NC}"
+        exit 1
+    fi
 fi
 
 echo -e "${GREEN}✅ Dependencies checked${NC}"
