@@ -338,4 +338,8 @@ if __name__ == '__main__':
     print("📱 Open http://localhost:5000 in your browser")
     print("🔧 Press Ctrl+C to stop the server")
     
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    # Configure debug and host based on environment
+    debug_mode = os.getenv('FLASK_DEBUG', 'false').lower() == 'true'
+    host_address = os.getenv('FLASK_HOST', '127.0.0.1')
+    
+    app.run(debug=debug_mode, host=host_address, port=5000)
