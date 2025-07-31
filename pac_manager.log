@@ -1,0 +1,28 @@
+2025-07-31 04:42:06,635 - INFO - Loaded configuration from scripts/config.json
+2025-07-31 04:42:06,635 - INFO - PAC file syntax validation passed: pac
+2025-07-31 04:42:06,635 - WARNING - PAC file missing FindProxyForURL function: pac5
+2025-07-31 04:42:15,389 - INFO - Loaded configuration from scripts/config.json
+2025-07-31 04:42:15,389 - INFO - Starting PAC configuration update cycle...
+2025-07-31 04:42:15,390 - INFO - Created backup: backups/pac.20250731_044215.bak
+2025-07-31 04:42:15,390 - INFO - Successfully updated PAC file: pac
+2025-07-31 04:42:15,391 - INFO - Created backup: backups/README.md.20250731_044215.bak
+2025-07-31 04:42:15,391 - INFO - Successfully updated domains file: README.md
+2025-07-31 04:42:15,391 - INFO - 
+PAC Configuration Manager - Statistics Report
+Generated: 2025年07月31日12点42分
+
+Files Processed: 2
+Domains Updated: 0
+Errors Encountered: 0
+Success Rate: 100.0%
+
+Configuration:
+- Timezone: Asia/Shanghai
+- Auto Backup: True
+- Domain Increment: 1
+- Proxy Servers: 4 configured
+
+2025-07-31 04:44:48,117 - INFO - Loaded configuration from scripts/config.json
+2025-07-31 04:47:44,897 - INFO - PAC file syntax validation passed: pac
+2025-07-31 04:47:44,897 - WARNING - PAC file missing FindProxyForURL function: pac5
+2025-07-31 04:47:44,969 - INFO - Loaded configuration from scripts/config.json

@@ -1,0 +1,16 @@
+{
+    "proxy_servers": [
+        "162.159.138.110:443",
+        "172.67.243.247:443",
+        "104.16.133.229:443",
+        "2402:d0c0:0:2e8::11:25"
+    ],
+    "backup_dir": "backups",
+    "timezone": "Asia/Shanghai",
+    "domain_increment": 1,
+    "auto_backup": true,
+    "update_frequency": "*/10 * * * *",
+    "notification_webhook": null,
+    "max_backup_files": 10,
+    "pac_validation": true
+}
