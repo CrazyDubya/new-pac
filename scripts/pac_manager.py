@@ -75,12 +75,12 @@ class PACConfigManager:
         if pytz:
             try:
                 tz = pytz.timezone(self.config['timezone'])
-                current_time = datetime.now(tz).strftime("%Y年%m月%d日%H点%M分")
+                current_time = datetime.now(tz).strftime(self.config['date_format'])
             except Exception as e:
                 self.logger.warning(f"Timezone error: {e}. Using system time.")
-                current_time = datetime.now().strftime("%Y年%m月%d日%H点%M分")
+                current_time = datetime.now().strftime(self.config['date_format'])
         else:
-            current_time = datetime.now().strftime("%Y年%m月%d日%H点%M分")
+            current_time = datetime.now().strftime(self.config['date_format'])
         
         return current_time
     
