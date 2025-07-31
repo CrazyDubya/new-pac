@@ -250,17 +250,69 @@ ${domainsArray.map(domain => `        "${domain}": 1`).join(',\n')}
     }
 
     startPerformanceMonitoring() {
-        setInterval(() => {
-            this.updatePerformanceMetrics();
-        }, 2000);
+        this.lastUpdateTime = 0;
+        this.updateInterval = 2000; // 2 seconds
+        this.lastMetrics = {}; // Cache for change detection
+        this.animationFrameId = null;
+        
+        this.scheduleNextUpdate();
+    }
+
+    scheduleNextUpdate() {
+        this.animationFrameId = requestAnimationFrame((currentTime) => {
+            if (currentTime - this.lastUpdateTime >= this.updateInterval) {
+                this.updatePerformanceMetrics();
+                this.lastUpdateTime = currentTime;
+            }
+            this.scheduleNextUpdate();
+        });
     }
 
     updatePerformanceMetrics() {
         // Simulate real-time metrics
-        const latency = Math.floor(Math.random() * 50) + 70; // 70-120ms
+        const newMetrics = {
+            latency: Math.floor(Math.random() * 50) + 70, // 70-120ms
+            activeProxies: Math.floor(Math.random() * 5) + 10,
+            successRate: (98 + Math.random() * 2).toFixed(1)
+        };
+        
+        // Only update if values have changed significantly
+        const shouldUpdate = this.shouldUpdateMetrics(newMetrics);
+        
+        if (shouldUpdate.chart) {
+            this.updateChart(newMetrics.latency);
+        }
+        
+        if (shouldUpdate.stats) {
+            // Batch DOM updates using requestAnimationFrame for smooth updates
+            requestAnimationFrame(() => {
+                this.batchUpdateStats(newMetrics);
+            });
+        }
+        
+        this.lastMetrics = { ...newMetrics };
+    }
+
+    shouldUpdateMetrics(newMetrics) {
+        const thresholds = {
+            latency: 5,     // Update if latency changes by more than 5ms
+            activeProxies: 1, // Update if proxy count changes
+            successRate: 0.1  // Update if success rate changes by more than 0.1%
+        };
+        
+        return {
+            chart: !this.lastMetrics.latency || 
+                   Math.abs(newMetrics.latency - this.lastMetrics.latency) >= thresholds.latency,
+            stats: !this.lastMetrics.activeProxies || 
+                   newMetrics.activeProxies !== this.lastMetrics.activeProxies ||
+                   Math.abs(parseFloat(newMetrics.successRate) - parseFloat(this.lastMetrics.successRate || 0)) >= thresholds.successRate
+        };
+    }
+
+    updateChart(latency) {
         const time = new Date().toLocaleTimeString();
         
-        // Update chart
+        // Update chart data
         if (this.performanceChart.data.labels.length > 20) {
             this.performanceChart.data.labels.shift();
             this.performanceChart.data.datasets[0].data.shift();
@@ -268,17 +320,26 @@ ${domainsArray.map(domain => `        "${domain}": 1`).join(',\n')}
         
         this.performanceChart.data.labels.push(time);
         this.performanceChart.data.datasets[0].data.push(latency);
+        
+        // Use more efficient chart update with animation disabled
         this.performanceChart.update('none');
+    }
+
+    batchUpdateStats(metrics) {
+        // Batch all DOM updates together to minimize layout thrashing
+        const updates = [
+            { id: 'avgLatency', value: metrics.latency + 'ms' },
+            { id: 'activeProxies', value: metrics.activeProxies },
+            { id: 'successRate', value: metrics.successRate + '%' }
+        ];
         
-        // Update stats
-        document.getElementById('avgLatency').textContent = latency + 'ms';
-        
-        // Simulate other metrics
-        const activeProxies = Math.floor(Math.random() * 5) + 10;
-        const successRate = (98 + Math.random() * 2).toFixed(1);
-        
-        document.getElementById('activeProxies').textContent = activeProxies;
-        document.getElementById('successRate').textContent = successRate + '%';
+        // Use document fragment for efficient DOM updates
+        updates.forEach(update => {
+            const element = document.getElementById(update.id);
+            if (element && element.textContent !== update.value.toString()) {
+                element.textContent = update.value;
+            }
+        });
     }
 
     addPerformanceData(type) {
@@ -288,6 +349,13 @@ ${domainsArray.map(domain => `        "${domain}": 1`).join(',\n')}
             type,
             latency: Math.floor(Math.random() * 100) + 50
         });
+    }
+
+    stopPerformanceMonitoring() {
+        if (this.animationFrameId) {
+            cancelAnimationFrame(this.animationFrameId);
+            this.animationFrameId = null;
+        }
     }
 
     showNotification(message, type) {
