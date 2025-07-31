@@ -319,7 +319,10 @@ def download_pac():
         f.write(pac_content)
         temp_path = f.name
     
-    return send_file(temp_path, as_attachment=True, download_name='proxy.pac')
+    try:
+        return send_file(temp_path, as_attachment=True, download_name='proxy.pac')
+    finally:
+        os.remove(temp_path)
 
 @app.route('/api/stats')
 def api_stats():
