@@ -1,4 +1,3 @@
-// PAC Configuration - Updated: 北京时间2025年07月31日12点42分更新
 var proxy = "PROXY 162.159.138.110:443;";
         
 var domains = {
