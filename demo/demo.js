@@ -77,7 +77,7 @@ class PACDemo {
 
     isValidDomain(domain) {
         const domainRegex = /^[a-zA-Z0-9][a-zA-Z0-9-]{1,61}[a-zA-Z0-9]\.[a-zA-Z]{2,}$/;
-        return domainRegex.test(domain) || /^[a-zA-Z0-9-]+\.[a-zA-Z]{2,}$/.test(domain);
+        return domainRegex.test(domain);
     }
 
     generatePACCode() {
